@@ -3,100 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A 64-question local study quiz for Chapter 3: Solving Problems by Searching.">
+  <meta name="description" content="Practice tests for Course 01: Foundations of AI.">
   <meta name="theme-color" content="#101827">
-  <title>Search Lab · Foundations of AI</title>
+  <title>Foundations of AI · Search Lab</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101827'/%3E%3Cpath d='M17 17h15v12h15v18H32V35H17z' fill='none' stroke='%235eead4' stroke-width='6' stroke-linejoin='round'/%3E%3Ccircle cx='47' cy='47' r='5' fill='%23fbbf24'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="question-data.js"></script>
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="shared/quiz.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to quiz content</a>
+  <a class="skip-link" href="#main-content">Skip to available tests</a>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Search Lab home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Search Lab</span></a>
+    <a class="brand" href="./" aria-label="Foundations of AI home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Search Lab</span></a>
     <div class="course-label"><span>Course 01</span><strong>Foundations of AI</strong></div>
-    <button class="text-button" id="reset-button" type="button">Reset progress</button>
+    <span></span>
   </header>
-  <main id="main-content">
-    <section class="setup-view view" id="setup-view" aria-labelledby="setup-title">
-      <div class="setup-intro">
-        <p class="eyebrow">Chapter 03 · Study workspace</p>
-        <h1 id="setup-title">Solving problems<br>by searching</h1>
-        <p class="lede">Build a focused practice set from 64 questions covering problem formulation, search mechanics, uninformed search, A*, and heuristic design.</p>
-        <div class="scope-strip" aria-label="Quiz scope"><span><strong>64</strong> questions</span><span><strong>6</strong> topic groups</span><span><strong>2</strong> practice modes</span></div>
+  <main class="course-home" id="main-content">
+    <section class="course-hero" aria-labelledby="course-title">
+      <div>
+        <p class="eyebrow">University course 01</p>
+        <h1 id="course-title">Foundations<br>of AI</h1>
       </div>
-      <div class="setup-panel">
-        <div class="resume-card" id="resume-card" hidden>
-          <div><span class="resume-kicker">Saved locally</span><strong id="resume-title">Session in progress</strong><span id="resume-detail"></span></div>
-          <button class="button secondary compact" id="resume-button" type="button">Resume</button>
-        </div>
-        <form id="setup-form">
-          <fieldset class="control-group">
-            <legend>Practice mode</legend>
-            <div class="segmented two-up">
-              <label><input type="radio" name="mode" value="study" checked><span><strong>Study</strong><small>Feedback after each answer</small></span></label>
-              <label><input type="radio" name="mode" value="quiz"><span><strong>Quiz</strong><small>Answers after submission</small></span></label>
-            </div>
-          </fieldset>
-          <fieldset class="control-group">
-            <legend>Sections</legend>
-            <div class="filter-actions"><button class="mini-action" id="select-all" type="button">Select all</button><button class="mini-action" id="clear-all" type="button">Clear</button></div>
-            <div class="topic-grid" id="topic-filters"></div>
-          </fieldset>
-          <div class="setup-row">
-            <fieldset class="control-group">
-              <legend>Question count</legend>
-              <div class="segmented count-options">
-                <label><input type="radio" name="count" value="10" checked><span>10</span></label>
-                <label><input type="radio" name="count" value="20"><span>20</span></label>
-                <label><input type="radio" name="count" value="all"><span>All</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="control-group">
-              <legend>Order</legend>
-              <label class="switch-row"><input id="shuffle-input" type="checkbox"><span class="switch" aria-hidden="true"></span><span><strong>Shuffle questions</strong><small>A stable order for this session</small></span></label>
-            </fieldset>
-          </div>
-          <p class="form-note" id="match-note" role="status"></p>
-          <button class="button primary full" id="start-button" type="submit">Start study session</button>
-        </form>
-      </div>
+      <p>Select a curriculum test. Each test keeps its own saved progress, question order, answers, flags, and results in this browser.</p>
     </section>
-    <section class="session-view view" id="session-view" hidden aria-label="Active quiz session">
-      <aside class="session-rail">
-        <div class="rail-heading"><div><p class="eyebrow" id="session-mode">Study mode</p><h2>Chapter 03</h2></div><span class="seed-label" id="seed-label"></span></div>
-        <div class="progress-copy"><span id="progress-label">0 of 10 answered</span><strong id="progress-percent">0%</strong></div>
-        <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="question-map" id="question-map" aria-label="Question navigation"></nav>
-        <div class="map-legend" aria-label="Question status legend"><span><i class="dot current"></i>Current</span><span><i class="dot answered"></i>Answered</span><span><i class="dot flagged"></i>Flagged</span></div>
-      </aside>
-      <div class="question-stage">
-        <div class="mobile-progress"><span id="mobile-index">Question 1 of 10</span><div class="progress-track" aria-hidden="true"><span id="mobile-progress-bar"></span></div></div>
-        <article class="question-card" id="question-card" tabindex="-1">
-          <div class="question-topline"><div class="question-meta" id="question-meta"></div><button class="flag-button" id="flag-button" type="button" aria-pressed="false"><span aria-hidden="true">◇</span> Flag for review</button></div>
-          <p class="question-position" id="question-position"></p>
-          <h2 class="question-prompt" id="question-prompt"></h2>
-          <form id="answer-form" novalidate><div id="answer-control"></div><p class="input-message" id="input-message" role="alert" hidden></p><div class="answer-actions" id="answer-actions"></div></form>
-          <section class="feedback-panel" id="feedback-panel" hidden aria-live="polite"></section>
-        </article>
-        <div class="session-actions"><button class="button secondary" id="previous-button" type="button">Previous</button><button class="button secondary" id="next-button" type="button">Next</button><button class="button primary submit-session" id="submit-session-button" type="button">Finish session</button></div>
-      </div>
-    </section>
-    <section class="results-view view" id="results-view" hidden aria-labelledby="results-title">
-      <div class="results-header"><div><p class="eyebrow">Session complete</p><h1 id="results-title">Your search report</h1><p id="results-subtitle"></p></div><button class="button secondary" id="new-session-button" type="button">New session</button></div>
-      <section class="prior-result" id="prior-result" hidden aria-labelledby="prior-title"><span>Original attempt</span><strong id="prior-title"></strong><p id="prior-detail"></p></section>
-      <div class="score-grid">
-        <section class="score-card machine-card" aria-labelledby="machine-title"><p class="score-kicker">Automatically graded</p><div class="score-main"><strong id="machine-score">0/0</strong><span id="machine-percent">—</span></div><h2 id="machine-title">Choice & numeric</h2><p id="machine-detail"></p></section>
-        <section class="score-card self-card" aria-labelledby="self-title"><p class="score-kicker">Self-assessed</p><div class="assessment-totals" id="assessment-totals"></div><h2 id="self-title">Written reasoning</h2><p id="self-detail"></p></section>
-      </div>
-      <div class="retry-bar"><div><strong>Keep practicing</strong><span>Retry sets keep this result as the original attempt.</span></div><div><button class="button secondary" id="retry-missed-button" type="button">Retry missed</button><button class="button secondary" id="retry-flagged-button" type="button">Retry flagged</button></div></div>
-      <div class="topic-results" id="topic-results"></div>
+    <section aria-labelledby="tests-title">
+      <div class="catalogue-heading"><h2 id="tests-title">Available tests</h2><span>1 test · 64 questions</span></div>
+      <a class="test-card" href="tests/chapter-03-search.html">
+        <span class="test-number" aria-hidden="true">03</span>
+        <span class="test-copy"><strong>Solving Problems by Searching</strong><span>Problem formulation, uninformed search, A*, and heuristic design</span></span>
+        <span class="test-meta"><span>64 questions</span><span>§§3.1–3.6</span></span>
+      </a>
     </section>
   </main>
-  <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
-  <dialog class="confirm-dialog" id="reset-dialog">
-    <form method="dialog"><p class="eyebrow">Local progress</p><h2>Reset saved progress?</h2><p>This removes the current session, answers, flags, and assessments from this browser. The question bank stays unchanged.</p><div class="dialog-actions"><button class="button secondary" value="cancel">Keep progress</button><button class="button danger" id="confirm-reset" value="reset">Reset everything</button></div></form>
-  </dialog>
 </body>
 </html>

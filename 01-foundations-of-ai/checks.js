@@ -12,10 +12,14 @@ assert(sourceMatch, "Embedded source JSON was not found");
 const sourceBank = JSON.parse(sourceMatch[1]);
 
 const context = { window: {} };
-vm.runInNewContext(fs.readFileSync(path.join(courseDir, "question-data.js"), "utf8"), context);
+vm.runInNewContext(fs.readFileSync(path.join(courseDir, "tests", "chapter-03-search-data.js"), "utf8"), context);
 const bank = JSON.parse(JSON.stringify(context.window.QUIZ_DATA));
+const config = JSON.parse(JSON.stringify(context.window.QUIZ_CONFIG));
 
 assert.deepEqual(bank, sourceBank, "Extracted data must match the supplied JSON exactly");
+assert.equal(config.id, "chapter-03-search", "The test needs a stable ID");
+assert.equal(config.storageKey, "foundations-ai-search-quiz:v1", "The test needs its own versioned storage key");
+assert.equal(config.topics.length, 6, "The test configuration must define its section filters");
 assert.equal(bank.questions.length, 64, "There must be exactly 64 questions");
 assert.equal(new Set(bank.questions.map((question) => question.id)).size, 64, "Question IDs must be unique");
 

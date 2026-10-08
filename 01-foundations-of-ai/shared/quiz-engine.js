@@ -1,17 +1,11 @@
 (() => {
   "use strict";
 
-  const STORAGE_KEY = "foundations-ai-search-quiz:v1";
+  const config = window.QUIZ_CONFIG;
+  const STORAGE_KEY = config?.storageKey;
   const SESSION_VERSION = 1;
   const AUTO_TYPES = new Set(["single-choice", "numeric"]);
-  const TOPICS = [
-    { id: "3.1", name: "Problem solving" },
-    { id: "3.2", name: "Problem types" },
-    { id: "3.3", name: "Search mechanics" },
-    { id: "3.4", name: "Uninformed search" },
-    { id: "3.5", name: "Heuristic search" },
-    { id: "3.6", name: "Heuristic design" }
-  ];
+  const TOPICS = config?.topics || [];
 
   const data = window.QUIZ_DATA;
   const byId = new Map((data?.questions || []).map((question) => [question.id, question]));
@@ -27,11 +21,14 @@
   };
 
   function validateBank(bank) {
+    if (!config || !config.id || !STORAGE_KEY || !TOPICS.length) throw new Error("This test is missing its quiz configuration.");
     if (!bank || bank.version !== 1 || !Array.isArray(bank.questions)) throw new Error("Question data is missing or has an unsupported version.");
-    if (bank.questions.length !== 64) throw new Error(`Expected 64 questions; found ${bank.questions.length}.`);
+    if (config.expectedQuestionCount && bank.questions.length !== config.expectedQuestionCount) {
+      throw new Error(`Expected ${config.expectedQuestionCount} questions; found ${bank.questions.length}.`);
+    }
     const ids = new Set();
     bank.questions.forEach((question) => {
-      if (!/^Q\d{2}$/.test(question.id) || ids.has(question.id)) throw new Error(`Invalid or duplicate question ID: ${question.id}`);
+      if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(question.id) || ids.has(question.id)) throw new Error(`Invalid or duplicate question ID: ${question.id}`);
       ids.add(question.id);
       if (!question.prompt || question.answer === undefined || !question.explanation) throw new Error(`${question.id} is missing required content.`);
       if (question.type === "single-choice") {
@@ -42,10 +39,6 @@
         throw new Error(`${question.id} needs a self-assessment checklist.`);
       }
     });
-    for (let number = 1; number <= 64; number += 1) {
-      const id = `Q${String(number).padStart(2, "0")}`;
-      if (!ids.has(id)) throw new Error(`Missing ${id}.`);
-    }
     return true;
   }
 
@@ -87,9 +80,10 @@
   }
 
   function questionTopics(question) {
-    if (question.id === "Q64") return ["3.4", "3.5", "3.6"];
-    const match = /^3\.\d/.exec(question.section);
-    return match ? [match[0]] : [];
+    if (config.topicOverrides?.[question.id]) return config.topicOverrides[question.id];
+    return TOPICS
+      .filter((topic) => question.section === topic.id || question.section.startsWith(`${topic.id}.`))
+      .map((topic) => topic.id);
   }
 
   function responseExists(question, response) {
@@ -577,7 +571,8 @@
     const groups = new Map();
     summary.items.forEach((item) => {
       const question = byId.get(item.id);
-      const key = question.id === "Q64" ? "Mixed §§3.4–3.6" : `§ ${questionTopics(question)[0]}`;
+      const topics = questionTopics(question);
+      const key = topics.length > 1 ? `Mixed §${question.section}` : `§ ${topics[0] || question.section}`;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(item);
     });
@@ -725,3 +720,4 @@
 
   init();
 })();
+

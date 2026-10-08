@@ -1,3 +1,20 @@
+window.QUIZ_CONFIG = {
+  id: "chapter-03-search",
+  storageKey: "foundations-ai-search-quiz:v1",
+  expectedQuestionCount: 64,
+  topics: [
+    { id: "3.1", name: "Problem solving" },
+    { id: "3.2", name: "Problem types" },
+    { id: "3.3", name: "Search mechanics" },
+    { id: "3.4", name: "Uninformed search" },
+    { id: "3.5", name: "Heuristic search" },
+    { id: "3.6", name: "Heuristic design" }
+  ],
+  topicOverrides: {
+    Q64: ["3.4", "3.5", "3.6"]
+  }
+};
+
 window.QUIZ_DATA = {
   "version": 1,
   "title": "Chapter 3 — Solving Problems by Searching",
@@ -1030,4 +1047,5 @@ window.QUIZ_DATA = {
     }
   ]
 };
+
 
